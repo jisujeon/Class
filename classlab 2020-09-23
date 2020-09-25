@@ -1,0 +1,82 @@
+#include <stdio.h>
+#include <time.h>
+#include <math.h>
+//2020-09-23 클래스랩
+void LineDraw(int x1, int y1, int x2, int y2) {
+    float y, m;
+    int dx, dy;
+    dx = x2 - x1;
+    dy = y2 - y1;
+    m = dy / dx; //기울기
+    for (int x = x1; x <=x2; x++) {
+        y = m * (x - x1) + y1;
+        round(y);
+    }
+}
+void DDA(int x1, int y1, int x2, int y2) {
+    float m, y;
+    int dx, dy;
+    dx = x2 - x1;
+    dy = y2 - y1;
+    m = dy / dx;
+    y = y1;
+    for (int x = x1; x <= x2; x++) {
+        round(y);
+        y += m;
+    }
+}
+
+void Bresenham(int x1, int y1, int x2, int y2) {
+    int dx, dy, incrE, incrNE, D, x, y;
+    dx = x2 - x1;
+    dy = y2 - y1;
+    D = 2 * dy - dx;//결정변수
+    incrE = 2 * dy;
+    incrNE = 2 * dy - 2 * dx;
+    x = x1; y = y1;
+    //Draw
+    while (x < x2) {
+        if (D <= 0) {
+            D += incrE;
+            x++;
+        }
+        else {
+            D += incrNE;
+            x++; y++;
+        }
+        //Draw
+    }
+}
+
+int main(void) {
+    int input = 0;
+    clock_t start, end;
+    double resultTime1 = 0.0, resultTime2 = 0.0, resultTime3 = 0.0;
+
+    start = clock();
+
+    LineDraw(0, 0, 500000000, 100000000); //LineDraw
+    end = clock();
+
+    resultTime1 = (double)end - start;
+    printf("LineDraw 시간 %If \n", resultTime1);
+
+    start = clock();
+
+    DDA(0, 0, 500000000, 100000000); //DDA
+    end = clock();
+
+    resultTime2 = (double)end - start;
+    printf("DDA 시간 %If \n", resultTime2);
+
+    start = clock();
+
+    Bresenham(0, 0, 500000000, 100000000);
+    end = clock();
+
+    resultTime3 = (double)end - start;
+    printf("MidpointLine 시간 %If \n", resultTime3);
+
+    scanf_s("%d", input);
+    return 0;
+}
